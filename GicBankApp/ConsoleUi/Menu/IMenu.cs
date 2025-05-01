@@ -1,4 +1,4 @@
-namespace GicBankApp.ConsoleUI.Menu;
+namespace GicBankApp.ConsoleUi.Menu;
 
 public interface IMenu
 {

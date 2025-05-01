@@ -1,13 +1,28 @@
-namespace GicBankApp.ConsoleUI.Menu;
+
+namespace GicBankApp.ConsoleUi.Menu;
+
+using GicBankApp.Domain.Aggregates;
+using GicBankApp.Domain.Common;
+using GicBankApp.Domain.Factories;
+using GicBankApp.Infrastructure.Services;
 
 public class MainMenu : IMenu
 {
+    IBankAccountRepository _accountRepo;
+    ITransactionIdGenerator _idGenerator;
+    ITransactionFactory _transactionFactory;        
+    public MainMenu()
+    {
+        _accountRepo = new BankAccountRepository();
+        _idGenerator = new TransactionIdGenerator();
+        _transactionFactory = new TransactionFactory(_idGenerator);
+        
+    }
+
     public void Start()
     {
         while (true)
         {
-            Console.Clear();
-            Console.WriteLine("Welcome to AwesomeGIC Bank! What would you like to do?");
             Console.WriteLine("[T] Input transactions");
             Console.WriteLine("[I] Define interest rules");
             Console.WriteLine("[P] Print statement");
@@ -19,7 +34,12 @@ public class MainMenu : IMenu
             switch (choice)
             {
                 case "T":
-                    new TransactionInputMenu().Start();
+                    new TransactionInputMenu(
+                        _accountRepo, 
+                        _idGenerator, 
+                        _transactionFactory,
+                        this)
+                    .Start();
                     break;
                 case "I":
                     throw new NotImplementedException("Interest rule definition is not implemented yet.");
