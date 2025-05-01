@@ -10,16 +10,13 @@ using GicBankApp.ConsoleUi.Printers;
 public class TransactionInputMenu
 {
     private readonly TransactionService _transactionService;   
-    private readonly MainMenu _mainMenu; 
     public TransactionInputMenu(
         IBankAccountRepository accountRepo, 
         ITransactionIdGenerator idGenerator,
-        ITransactionFactory transactionFactory,
-        MainMenu mainMenu)
+        ITransactionFactory transactionFactory)
     {
         _transactionService = 
             new TransactionService(accountRepo, idGenerator, transactionFactory);
-        _mainMenu = mainMenu;
     }
 
     public async void Start()
@@ -64,12 +61,12 @@ public class TransactionInputMenu
                 if (result.IsSuccess) {
                     var account = result.Value;
                     AccountStatementPrinter.Print(account);
-                    Console.WriteLine("Is there anything else you'd like to do?");
-                    _mainMenu.Start();
+                    return;
                 } 
                 else
                 {
-                    Console.WriteLine($"Error: {result.Error}");
+                    Console.WriteLine($"Error: {result.Error.Message}");
+                    return;
                 }
                 
             }

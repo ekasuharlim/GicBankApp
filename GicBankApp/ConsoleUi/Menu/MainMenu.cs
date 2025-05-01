@@ -37,8 +37,7 @@ public class MainMenu : IMenu
                     new TransactionInputMenu(
                         _accountRepo, 
                         _idGenerator, 
-                        _transactionFactory,
-                        this)
+                        _transactionFactory)
                     .Start();
                     break;
                 case "I":
@@ -53,6 +52,9 @@ public class MainMenu : IMenu
                     Console.WriteLine("Invalid choice. Please try again.");
                     break;
             }
+            
+            Console.WriteLine();
+            Console.WriteLine("Is there anything else you would like to do?");
         }
     }
 }

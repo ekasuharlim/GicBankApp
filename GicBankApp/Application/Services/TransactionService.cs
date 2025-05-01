@@ -8,6 +8,7 @@ using GicBankApp.Domain.Common;
 using GicBankApp.Domain.Aggregates;
 using GicBankApp.Domain.ValueObjects;
 using GicBankApp.Application.Mappers;
+using GicBankApp.Domain.Entities;
 
 public class TransactionService : ITransactionService
 {
@@ -37,7 +38,10 @@ public class TransactionService : ITransactionService
             new Money(amount), 
             type);        
         
-        account.AddTransaction(transaction); 
+        Result<Transaction> result = account.AddTransaction(transaction); 
+        if(!result.IsSuccess){
+            return Result<BankAccountDto>.Failure(result.Error);
+        }
 
         await _accountRepo.SaveAsync(account);
 
