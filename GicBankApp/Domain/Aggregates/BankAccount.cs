@@ -9,14 +9,16 @@ public class BankAccount : Entity, IAggregateRoot
 {
     private readonly List<Transaction> _transactions = new();
 
-    private Money _latestBalance = new Money(0.00m);
 
     public BankAccount(string accountId)
     {
         AccountId = accountId;
+        LatestBalance = new Money(0);
     }
 
     public string AccountId { get; private set; }
+
+    public Money LatestBalance { get; private set;}
 
     public IReadOnlyCollection<Transaction> Transactions => _transactions.AsReadOnly();
 
@@ -28,7 +30,7 @@ public class BankAccount : Entity, IAggregateRoot
 
         if (transaction.Type == TransactionType.Withdrawal)
         {
-            var newBalance = transaction.GetBalance(_latestBalance);
+            var newBalance = transaction.GetBalance(LatestBalance);
             if(newBalance.Value < 0)
             {
                 return Result<Transaction>.Failure(Error.InsufficentBalance);
@@ -36,7 +38,7 @@ public class BankAccount : Entity, IAggregateRoot
             }
         }
 
-        _latestBalance = transaction.GetBalance(_latestBalance);
+        LatestBalance = transaction.GetBalance(LatestBalance);
         _transactions.Add(transaction);
         return Result<Transaction>.Success(transaction);
     }

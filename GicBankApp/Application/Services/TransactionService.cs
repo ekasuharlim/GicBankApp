@@ -1,10 +1,14 @@
-using GicBankApp.Domain.Aggregates;
-using GicBankApp.Domain.Common;
-using GicBankApp.Application.DTOs;
+namespace GicBankApp.Application.Services;
+
+using GicBankApp.Application.Dtos;
 using GicBankApp.Application.Interfaces;
 using GicBankApp.Domain.Factories;
 using GicBankApp.Shared;
+using GicBankApp.Domain.Common;
+using GicBankApp.Domain.Aggregates;
 using GicBankApp.Domain.ValueObjects;
+using GicBankApp.Application.Mappers;
+
 public class TransactionService : ITransactionService
 {
     private readonly IBankAccountRepository _accountRepo;
@@ -22,7 +26,7 @@ public class TransactionService : ITransactionService
         _transactionFactory = transactionFactory;
     }
 
-    public async Task<Result<TransactionDTO>> AddTransactionAsync(
+    public async Task<Result<BankAccountDto>> AddTransactionAsync(
         string date, string accountId, string type, decimal amount)
     {
         var existingAccount = await _accountRepo.GetByIdAsync(accountId);
@@ -35,19 +39,12 @@ public class TransactionService : ITransactionService
         
         account.AddTransaction(transaction); 
 
-        _accountRepo.Save(account);
+        await _accountRepo.SaveAsync(account);
 
-        var transactions = account.GetTransactions();  // from Domain
-        var latest = transactions.Last();
+        return Result<BankAccountDto>.Success(
+            BankAccountMapper.ToDto(account));
 
-        return new TransactionDTO
-        {
-            TransactionId = latest.TransactionId,
-            AccountId = latest.AccountId,
-            Amount = latest.Amount.Value,
-            Type = latest.Type.ToString(),
-            Date = latest.Date.ToString("yyyy-MM-dd")
-        };
     }
+
 
 }

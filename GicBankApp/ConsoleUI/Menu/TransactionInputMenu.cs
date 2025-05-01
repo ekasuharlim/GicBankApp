@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace GicBankApp.ConsoleUI.Menu;
 public class TransactionInputMenu
 {
@@ -33,11 +35,9 @@ public class TransactionInputMenu
             try
             {
                 // Call Application Service
-                var transaction = ApplicationServices.Transactions.AddTransaction(date, accountId, type, amount);
+                //var transaction = ApplicationServices.Transactions.AddTransaction(date, accountId, type, amount);
 
                 // Display statement
-                var statement = ApplicationServices.Statements.GetAccountStatement(accountId);
-                AccountStatementPrinter.Print(accountId, statement);
             }
             catch (Exception ex)
             {
