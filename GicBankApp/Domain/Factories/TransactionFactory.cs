@@ -3,7 +3,7 @@ namespace GicBankApp.Domain.Factories;
 using GicBankApp.Domain.Common;
 using GicBankApp.Domain.Entities;
 using GicBankApp.Domain.ValueObjects;
-public class TransactionFactory 
+public class TransactionFactory : ITransactionFactory
 {
     private readonly ITransactionIdGenerator _transactionIdGenerator;
 
