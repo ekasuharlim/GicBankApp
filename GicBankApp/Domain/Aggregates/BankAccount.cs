@@ -28,12 +28,11 @@ public class BankAccount : Entity, IAggregateRoot
 
         if (transaction.Type == TransactionType.Withdrawal)
         {
-            try{
-                var newBalance = transaction.GetBalance(_latestBalance);
-
-            }catch(InvalidOperationException)
+            var newBalance = transaction.GetBalance(_latestBalance);
+            if(newBalance.Value < 0)
             {
                 return Result<Transaction>.Failure(Error.InsufficentBalance);
+
             }
         }
 
