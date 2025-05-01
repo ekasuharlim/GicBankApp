@@ -5,16 +5,16 @@ using GicBankApp.Domain.ValueObjects;
 
 public class Transaction : Entity
 {
-    public DateTime Date { get; }
-    public string TransactionId { get; }
+    public BusinessDate Date { get; }
+    public TransactionId TransactionId { get; }
     public TransactionType Type { get; }
-    public decimal Amount { get; }
+    public Money Amount { get; }
 
     public Transaction(
-        DateTime date, 
-        string transactionId, 
+        BusinessDate date, 
+        TransactionId transactionId, 
         TransactionType type, 
-        decimal amount){
+        Money amount){
 
         Date = date;
         TransactionId = transactionId;

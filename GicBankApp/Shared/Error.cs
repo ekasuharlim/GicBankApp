@@ -13,5 +13,8 @@ public class Error
 
     public static Error FirstTransactionCannotBeWithdrawal =
         new("BANKACCOUNT.FIRST_TXN_WITHDRAWAL", "The first transaction cannot be a withdrawal.");
+        
+    public static Error InsufficentBalance =
+        new("BANKACCOUNT.INSUFFICENT_BALANCE", "Insufficent Balance.");
 
 }
