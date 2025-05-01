@@ -7,7 +7,7 @@ public class TransactionIdGenerator : ITransactionIdGenerator
 {
     private readonly Dictionary<string, int> _dailySequence = new();
 
-    public string GenerateId(BusinessDate date)
+    public TransactionId GenerateId(BusinessDate date)
     {
         var key = date.ToString(); 
 
@@ -16,7 +16,7 @@ public class TransactionIdGenerator : ITransactionIdGenerator
         else
             _dailySequence[key]++;
 
-        var sequence = _dailySequence[key].ToString("D2"); 
-        return $"{key}-{sequence}";
+        var sequence = _dailySequence[key]; 
+        return new TransactionId(date, sequence);
     }
 }

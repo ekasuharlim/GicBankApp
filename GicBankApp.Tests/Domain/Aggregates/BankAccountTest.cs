@@ -4,6 +4,8 @@ using GicBankApp.Domain.Aggregates;
 using GicBankApp.Domain.Entities;
 using GicBankApp.Domain.ValueObjects;
 using GicBankApp.Shared;
+using GicBankApp.Domain.Common;
+using GicBankApp.Domain.Factories;
 
 public class BankAccountTest
 {
@@ -11,13 +13,12 @@ public class BankAccountTest
     public void FirstTransaction_ShouldFail_IfWithdrawal()
     {
         var account = new BankAccount("AC001");
+        var date = BusinessDate.From("20230626");         
 
-        var transaction = new Transaction(
-            transactionId: "TX001",
-            date: BusinessDate.From("20230626"),
-            type: TransactionType.Withdrawal,
-            amount: 100.00m
-        );
+        var transaction = new DepositTransaction(
+            date, 
+            new TransactionId(date, 1), 
+            new Money(100.00m)); 
 
         var result = account.AddTransaction(transaction);
 
@@ -31,12 +32,13 @@ public class BankAccountTest
     {
         var account = new BankAccount("AC001");
 
-        var transaction = new Transaction(
-            transactionId: "TX001",
-            date: BusinessDate.From("20230626"),
-            type: TransactionType.Deposit,
-            amount: 100.00m
-        );
+        var date = BusinessDate.From("20230626"); 
+
+        var transaction = new DepositTransaction(
+            date, 
+            new TransactionId(date, 1), 
+            new Money(100.00m)); 
+
 
         Result<Transaction> result = account.AddTransaction(transaction);
 
@@ -49,23 +51,22 @@ public class BankAccountTest
     public void Withdrawal_Transaction_ShouldFail_If_Insufficent_Balance()
     {
         var account = new BankAccount("AC001");
+        var date = BusinessDate.From("20230626"); 
 
-        var deposit = new Transaction(
-            transactionId: "TX001",
-            date: BusinessDate.From("20230626"),
-            type: TransactionType.Deposit,
-            amount: 100.00m
-        );
+        var deposit = new DepositTransaction(
+            date, 
+            new TransactionId(date, 1), 
+            new Money(100.00m)); 
+
 
         Result<Transaction> depositAction = account.AddTransaction(deposit);
         Assert.True(depositAction.IsSuccess);
 
-        var withDrawal = new Transaction(
-            transactionId: "TX002",
-            date: BusinessDate.From("20230626"),
-            type: TransactionType.Withdrawal,
-            amount: 101.00m
-        );
+        var withDrawal = new WithdrawalTransaction(
+            date, 
+            new TransactionId(date, 1), 
+            new Money(101.00m)); 
+
 
         Result<Transaction> withdrawalAction = account.AddTransaction(withDrawal);
         Assert.False(withdrawalAction.IsSuccess);
@@ -73,5 +74,6 @@ public class BankAccountTest
         Assert.Equal(Error.InsufficentBalance.Code, withdrawalAction.Error!.Code);
 
     }
+
 
 }

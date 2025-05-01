@@ -13,7 +13,7 @@ public class TransactionIdGeneratorTests
 
         var id = generator.GenerateId(date);
 
-        Assert.Equal("20230626-01", id);
+        Assert.Equal("20230626-01", id.Value);
     }
 
     [Fact]
@@ -26,9 +26,9 @@ public class TransactionIdGeneratorTests
         var id2 = generator.GenerateId(date);
         var id3 = generator.GenerateId(date);
 
-        Assert.Equal("20230626-01", id1);
-        Assert.Equal("20230626-02", id2);
-        Assert.Equal("20230626-03", id3);
+        Assert.Equal("20230626-01", id1.Value);
+        Assert.Equal("20230626-02", id2.Value);
+        Assert.Equal("20230626-03", id3.Value);
     }
 
     [Fact]
@@ -42,8 +42,8 @@ public class TransactionIdGeneratorTests
         var id2 = generator.GenerateId(date2);
         var id3 = generator.GenerateId(date1);
 
-        Assert.Equal("20230626-01", id1);
-        Assert.Equal("20230627-01", id2);
-        Assert.Equal("20230626-02", id3);
+        Assert.Equal("20230626-01", id1.Value);
+        Assert.Equal("20230627-01", id2.Value);
+        Assert.Equal("20230626-02", id3.Value);
     }
 }

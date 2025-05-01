@@ -2,11 +2,14 @@ namespace GicBankApp.Domain.Aggregates;
 
 using GicBankApp.Domain.Common;
 using GicBankApp.Domain.Entities;
+using GicBankApp.Domain.ValueObjects;
 using GicBankApp.Shared;
 
 public class BankAccount : Entity, IAggregateRoot
 {
     private readonly List<Transaction> _transactions = new();
+
+    private Money _latestBalance = new Money(0);
 
     public BankAccount(string accountId)
     {

@@ -1,6 +1,8 @@
 namespace GicBankApp.Domain.ValueObjects;
 
-public sealed class TransactionId
+using GicBankApp.Domain.Common;
+
+public sealed class TransactionId : ValueObject
 {
     public string Value { get; }
 
