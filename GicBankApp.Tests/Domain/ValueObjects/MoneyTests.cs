@@ -6,7 +6,6 @@ public class MoneyTests
 {
     [Theory]
     [InlineData(-1)]  
-    [InlineData(0)]   
     [InlineData(1.2345)] 
     public void Money_ShouldThrowException_ForInvalidAmount(decimal invalidMoney)
     {

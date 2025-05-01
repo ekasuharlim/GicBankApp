@@ -15,7 +15,7 @@ public class BankAccountTest
         var account = new BankAccount("AC001");
         var date = BusinessDate.From("20230626");         
 
-        var transaction = new DepositTransaction(
+        var transaction = new WithdrawalTransaction(
             date, 
             new TransactionId(date, 1), 
             new Money(100.00m)); 
