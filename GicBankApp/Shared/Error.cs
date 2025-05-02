@@ -17,4 +17,8 @@ public class Error
     public static Error InsufficentBalance =
         new("BANKACCOUNT.INSUFFICENT_BALANCE", "Insufficent Balance.");
 
+    public static Error InvalidInterestRateAmount =
+        new("INTERESTRULE.INVALID_RATE_AMOUNT", "Interest rate should be greater than 0 and less than 100");
+
+
 }
