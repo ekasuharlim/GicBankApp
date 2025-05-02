@@ -20,5 +20,7 @@ public class Error
     public static Error InvalidInterestRateAmount =
         new("INTERESTRULE.INVALID_RATE_AMOUNT", "Interest rate should be greater than 0 and less than 100");
 
+    public static Error InvalidMonthlyPeriodMonth =
+        new("MONTHLYPERIOD.INVALID_MONTH", "Monthly Period Month must be between 1 and 12");
 
 }
