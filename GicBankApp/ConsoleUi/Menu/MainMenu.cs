@@ -4,6 +4,7 @@ namespace GicBankApp.ConsoleUi.Menu;
 using GicBankApp.Domain.Aggregates;
 using GicBankApp.Domain.Common;
 using GicBankApp.Domain.Factories;
+using GicBankApp.Infrastructure.Repository;
 using GicBankApp.Infrastructure.Services;
 
 public class MainMenu : IMenu
@@ -36,7 +37,6 @@ public class MainMenu : IMenu
                 case "T":
                     new TransactionInputMenu(
                         _accountRepo, 
-                        _idGenerator, 
                         _transactionFactory)
                     .Start();
                     break;

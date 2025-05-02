@@ -21,7 +21,6 @@ public class TransactionServiceTests
 
         _service = new TransactionService(
             _accountRepoMock.Object,
-            Mock.Of<ITransactionIdGenerator>(),
             _transactionFactoryMock.Object);
     }
 
@@ -104,7 +103,6 @@ public class TransactionServiceTests
             [Fact]
     public async Task AddTransactionAsync_ShouldReturnErrorIfTransactionNotValid()
     {
-        // Arrange
         var accountId = "AC002";
         var date = "20230627";
         var type = "W";

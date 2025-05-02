@@ -3,9 +3,10 @@ using GicBankApp.Domain.ValueObjects;
 
 public interface IInterestRuleRepository
 {
-    Task<IEnumerable<InterestRule>> GetInterestRules(int month, int year);
-
-    Task<IEnumerable<InterestRule>> GetAllInterestRules();
+    Task<IEnumerable<InterestRule>> GetAllInterestRulesAsync();
 
     Task SaveAsync(InterestRule interestRule);
+    Task<IReadOnlyList<InterestRule>> GetInterestRuleByDateAsync(BusinessDate date);
+    Task<IReadOnlyList<InterestRule>> RemoveInterestRuleByDateAsync(BusinessDate date);
+
 }

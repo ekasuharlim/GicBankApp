@@ -12,11 +12,10 @@ public class TransactionInputMenu
     private readonly TransactionService _transactionService;   
     public TransactionInputMenu(
         IBankAccountRepository accountRepo, 
-        ITransactionIdGenerator idGenerator,
         ITransactionFactory transactionFactory)
     {
         _transactionService = 
-            new TransactionService(accountRepo, idGenerator, transactionFactory);
+            new TransactionService(accountRepo, transactionFactory);
     }
 
     public async void Start()

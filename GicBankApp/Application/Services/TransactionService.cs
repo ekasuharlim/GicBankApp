@@ -13,17 +13,14 @@ using GicBankApp.Domain.Entities;
 public class TransactionService : ITransactionService
 {
     private readonly IBankAccountRepository _accountRepo;
-    private readonly ITransactionIdGenerator _idGenerator;
 
     private readonly ITransactionFactory _transactionFactory;
 
     public TransactionService(
         IBankAccountRepository accountRepo, 
-        ITransactionIdGenerator idGenerator,
         ITransactionFactory transactionFactory)
     {
         _accountRepo = accountRepo;
-        _idGenerator = idGenerator;
         _transactionFactory = transactionFactory;
     }
 
