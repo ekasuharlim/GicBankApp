@@ -2,20 +2,16 @@ namespace GicBankApp.ConsoleUi.Menu;
 
 using GicBankApp.Application.Services;
 using System.Globalization;
-using GicBankApp.Domain.Factories;
-using GicBankApp.Domain.Aggregates;
-using GicBankApp.Domain.Common;
 using GicBankApp.ConsoleUi.Printers;
+using GicBankApp.Application.Interfaces;
 
 public class TransactionInputMenu
 {
-    private readonly TransactionService _transactionService;   
+    private readonly ITransactionService _transactionService;   
     public TransactionInputMenu(
-        IBankAccountRepository accountRepo, 
-        ITransactionFactory transactionFactory)
+        ITransactionService transactionService)
     {
-        _transactionService = 
-            new TransactionService(accountRepo, transactionFactory);
+        _transactionService = transactionService;
     }
 
     public async void Start()
@@ -59,7 +55,8 @@ public class TransactionInputMenu
 
                 if (result.IsSuccess) {
                     var account = result.Value;
-                    AccountStatementPrinter.Print(account);
+                    var printer = new AccountStatementPrinter(account);
+                    printer.Print();
                     return;
                 } 
                 else

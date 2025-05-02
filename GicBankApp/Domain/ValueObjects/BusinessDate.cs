@@ -3,7 +3,7 @@ namespace GicBankApp.Domain.ValueObjects;
 using System.Globalization;
 using GicBankApp.Domain.Common;
 
-public sealed class BusinessDate : ValueObject {
+public sealed class BusinessDate : ValueObject, IEquatable<BusinessDate> {
        public DateTime Value { get; }
 
         private BusinessDate(DateTime value)
@@ -25,4 +25,10 @@ public sealed class BusinessDate : ValueObject {
         }    
 
          public override string ToString() => Value.ToString("yyyyMMdd");
+
+    public bool Equals(BusinessDate? other)
+    {
+        if (other is null) return false;
+        return Value.Equals(other.Value);
+    }
 }
