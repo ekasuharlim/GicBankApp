@@ -5,7 +5,6 @@ using GicBankApp.Domain.ValueObjects;
 public class MoneyTests
 {
     [Theory]
-    [InlineData(-1)]  
     [InlineData(1.2345)] 
     public void Money_ShouldThrowException_ForInvalidAmount(decimal invalidMoney)
     {
@@ -18,18 +17,18 @@ public class MoneyTests
     [InlineData(0.99)]
     public void Money_ShouldNotThrowException_ForValidAmount(decimal validMoney)
     {
-        var Money = new Money(validMoney);
+        var money = new Money(validMoney);
 
-        Assert.Equal(validMoney, Money.Value);
+        Assert.Equal(validMoney, money.Value);
     }
 
     [Fact]
     public void Money_Addition_ShouldReturnCorrectResult()
     {
-        var Money1 = new Money(10.00m);
-        var Money2 = new Money(5.50m);
+        var money1 = new Money(10.00m);
+        var money2 = new Money(5.50m);
 
-        var result = Money1 + Money2;
+        var result = money1 + money2;
 
         Assert.Equal(15.50m, result.Value);
     }
@@ -37,23 +36,22 @@ public class MoneyTests
     [Fact]
     public void Money_Subtraction_ShouldReturnCorrectResult()
     {
-        var Money1 = new Money(10.00m);
-        var Money2 = new Money(5.50m);
+        var money1 = new Money(10.00m);
+        var money2 = new Money(5.50m);
 
-        var result = Money1 - Money2;
+        var result = money1 - money2;
 
         Assert.Equal(4.50m, result.Value);
     }
 
  [Fact]
-    public void Money_Subtraction_ShouldThrowExceptionForNegativeResult()
+    public void Money_Subtraction_ShouldWorksForNegativeResult()
     {
-        // Arrange
         var money1 = new Money(5.00m);
         var money2 = new Money(10.00m);
+        var result = money1 - money2;
+        Assert.Equal(-5.00m, result.Value);
 
-        // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => money1 - money2);
     }
 
 }
