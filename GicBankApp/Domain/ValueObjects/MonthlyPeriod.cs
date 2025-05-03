@@ -6,10 +6,16 @@ public sealed class MonthlyPeriod : IEquatable<MonthlyPeriod>
     public int Year { get; }
     public int Month { get; }
 
+    public DateTime StartDate { get; private set;}
+    public DateTime EndDate { get; private set;}
+
     private MonthlyPeriod(int year, int month)
     {
         Year = year;
         Month = month;
+
+        StartDate = new DateTime(year, month, 1);
+        EndDate = StartDate.AddMonths(1).AddDays(-1);        
     }
 
     public static Result<MonthlyPeriod> Create(int year, int month)
