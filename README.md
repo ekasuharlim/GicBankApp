@@ -25,6 +25,7 @@ dotnet test
 
 # Run the application
 dotnet run
+```
 
 Assumptions:
 - User can't enter back dated transaction
