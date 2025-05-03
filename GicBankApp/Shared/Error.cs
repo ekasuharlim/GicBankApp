@@ -11,6 +11,9 @@ public class Error
         Message = message;
     }
 
+    public static Error BankAccountNotFound =
+        new("BANKACCOUNT.NOT_FOUND", "Account number not found.");
+
     public static Error FirstTransactionCannotBeWithdrawal =
         new("BANKACCOUNT.FIRST_TXN_WITHDRAWAL", "The first transaction cannot be a withdrawal.");
         
