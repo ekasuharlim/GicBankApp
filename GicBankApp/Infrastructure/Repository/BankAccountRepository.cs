@@ -1,4 +1,4 @@
-namespace GicBankApp.Infrastructure.Services;
+namespace GicBankApp.Infrastructure.Repository;
 
 using GicBankApp.Domain.Aggregates;
 

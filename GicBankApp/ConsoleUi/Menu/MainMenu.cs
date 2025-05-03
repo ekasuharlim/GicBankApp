@@ -1,21 +1,40 @@
 
 namespace GicBankApp.ConsoleUi.Menu;
 
+using GicBankApp.Application.Interfaces;
 using GicBankApp.Domain.Aggregates;
 using GicBankApp.Domain.Common;
+using GicBankApp.Domain.Entities;
 using GicBankApp.Domain.Factories;
+using GicBankApp.Infrastructure.Repository;
 using GicBankApp.Infrastructure.Services;
+using GicBankApp.Application.Services;
 
 public class MainMenu : IMenu
 {
     IBankAccountRepository _accountRepo;
     ITransactionIdGenerator _idGenerator;
-    ITransactionFactory _transactionFactory;        
+    ITransactionFactory _transactionFactory; 
+
+    IInterestRuleRepository _interestRuleRepo;
+    ITransactionService _transactionService;
+    IInterestRuleService _interestRuleService;
+
+    IPrintStatementService _printStatementService;
+    InterestCalculatorService _interestCalculatorService;
+    IEodBalanceService _eodBalanceService;
+
     public MainMenu()
     {
         _accountRepo = new BankAccountRepository();
         _idGenerator = new TransactionIdGenerator();
         _transactionFactory = new TransactionFactory(_idGenerator);
+        _transactionService = new TransactionService(_accountRepo, _transactionFactory);
+        _interestRuleRepo = new InterestRuleRepository();
+        _interestRuleService = new InterestRuleService(_interestRuleRepo);
+        _eodBalanceService = new EodBalanceService();
+        _interestCalculatorService = new InterestCalculatorService(_interestRuleRepo, _eodBalanceService);
+        _printStatementService = new PrintStatementService(_accountRepo, _interestCalculatorService);
         
     }
 
@@ -34,16 +53,14 @@ public class MainMenu : IMenu
             switch (choice)
             {
                 case "T":
-                    new TransactionInputMenu(
-                        _accountRepo, 
-                        _idGenerator, 
-                        _transactionFactory)
-                    .Start();
+                    new TransactionInputMenu(_transactionService).Start();
                     break;
                 case "I":
-                    throw new NotImplementedException("Interest rule definition is not implemented yet.");
+                    new InterestRuleInputMenu(_interestRuleService).Start();
+                    break;
                 case "P":
-                    throw new NotImplementedException("Print statement is not implemented yet.");
+                    new PrintStatementMenu(_printStatementService).Start();
+                    break;
                 case "Q":
                     Console.WriteLine("Thank you for banking with AwesomeGIC Bank.");
                     Console.WriteLine("Have a nice day!");

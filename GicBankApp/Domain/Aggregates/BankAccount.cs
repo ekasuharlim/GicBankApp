@@ -27,6 +27,10 @@ public class BankAccount : Entity, IAggregateRoot
         {
             return Result<Transaction>.Failure(Error.FirstTransactionCannotBeWithdrawal);
         }
+        if (_transactions.Count > 0 && transaction.Date.Value < _transactions.Last().Date.Value)
+        {
+            return Result<Transaction>.Failure(Error.TransactionDateMustBeAfterLastTransaction);
+        }
 
         if (transaction.Type == TransactionType.Withdrawal)
         {
@@ -41,5 +45,20 @@ public class BankAccount : Entity, IAggregateRoot
         LatestBalance = transaction.GetBalance(LatestBalance);
         _transactions.Add(transaction);
         return Result<Transaction>.Success(transaction);
+    }
+
+    public Money GetBalanceBeforeDate(BusinessDate date)
+    {
+        var transactionsBeforeDate = _transactions
+            .Where(t => t.Date.Value < date.Value)
+            .ToList();
+
+        if (transactionsBeforeDate.Count == 0)
+        {
+            return new Money(0);
+        }
+
+        return transactionsBeforeDate
+            .Aggregate(new Money(0), (current, transaction) => transaction.GetBalance(current));
     }
 }
