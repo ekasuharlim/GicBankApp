@@ -20,6 +20,10 @@ public class MainMenu : IMenu
     ITransactionService _transactionService;
     IInterestRuleService _interestRuleService;
 
+    IPrintStatementService _printStatementService;
+    InterestCalculatorService _interestCalculatorService;
+    IEodBalanceService _eodBalanceService;
+
     public MainMenu()
     {
         _accountRepo = new BankAccountRepository();
@@ -28,6 +32,9 @@ public class MainMenu : IMenu
         _transactionService = new TransactionService(_accountRepo, _transactionFactory);
         _interestRuleRepo = new InterestRuleRepository();
         _interestRuleService = new InterestRuleService(_interestRuleRepo);
+        _eodBalanceService = new EodBalanceService();
+        _interestCalculatorService = new InterestCalculatorService(_interestRuleRepo, _eodBalanceService);
+        _printStatementService = new PrintStatementService(_accountRepo, _interestCalculatorService);
         
     }
 
@@ -52,7 +59,8 @@ public class MainMenu : IMenu
                     new InterestRuleInputMenu(_interestRuleService).Start();
                     break;
                 case "P":
-                    throw new NotImplementedException("Print statement is not implemented yet.");
+                    new PrintStatementMenu(_printStatementService).Start();
+                    break;
                 case "Q":
                     Console.WriteLine("Thank you for banking with AwesomeGIC Bank.");
                     Console.WriteLine("Have a nice day!");

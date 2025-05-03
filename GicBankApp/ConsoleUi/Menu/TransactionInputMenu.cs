@@ -55,7 +55,7 @@ public class TransactionInputMenu
 
                 if (result.IsSuccess) {
                     var account = result.Value;
-                    var printer = new AccountStatementPrinter(account);
+                    var printer = new BankAccountPrinter(account);
                     printer.Print();
                     return;
                 } 

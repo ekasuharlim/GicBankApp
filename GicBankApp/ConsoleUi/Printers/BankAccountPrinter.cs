@@ -2,11 +2,11 @@ namespace GicBankApp.ConsoleUi.Printers;
 
 using GicBankApp.Application.Dtos;
 
-public class AccountStatementPrinter : IPrinter
+public class BankAccountPrinter : IPrinter
 {
     private readonly BankAccountDto _bankAccount;
 
-    public AccountStatementPrinter(BankAccountDto account)
+    public BankAccountPrinter(BankAccountDto account)
     {
         _bankAccount = account;
     }

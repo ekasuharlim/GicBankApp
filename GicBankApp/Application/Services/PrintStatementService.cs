@@ -42,14 +42,18 @@ public class PrintStatementService : IPrintStatementService
 
 
         List<TransactionDto> transactions = new List<TransactionDto>();
-        //convert transactions      
+
         Money previousPeriodBalance = 
             account.GetBalanceBeforeDate(BusinessDate.From(reportPeriod.StartDate));
         
         Money runningBalance = previousPeriodBalance;
+
+        var transactionInPeriod =  account.Transactions
+            .Where(t => t.Date.Value >= reportPeriod.StartDate && t.Date.Value <= reportPeriod.EndDate)
+            .ToList();
         
 
-        foreach (var transaction in account.Transactions)
+        foreach (var transaction in transactionInPeriod)
         {
             runningBalance = transaction.GetBalance(runningBalance);
             //convert transaction to dto
@@ -69,7 +73,7 @@ public class PrintStatementService : IPrintStatementService
             Amount = monthlyInterest,
             TransactionId = String.Empty,
             Type = "I",
-            Balance = runningBalance.Value
+            Balance = runningBalance.Value + monthlyInterest
         };
         transactions.Add(interestTransactionDto);
 

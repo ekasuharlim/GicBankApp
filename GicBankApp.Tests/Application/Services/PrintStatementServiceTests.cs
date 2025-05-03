@@ -86,5 +86,103 @@ public class PrintStatementServiceTests
         Assert.Equal("I", dto.Transactions[2].Type);
         Assert.Equal(0.39m, dto.Transactions[2].Amount);
         Assert.Equal(string.Empty, dto.Transactions[2].TransactionId);
-    }    
+        Assert.Equal(100.39m, dto.Transactions[2].Balance);
+    }
+
+
+    [Fact]
+    public async Task PrintStatementAsync_ReturnsSuccess_WithTransactionOnlyInPeriodRequested()
+    {
+        var account = new BankAccount("AC001");
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230501"), 
+            new Money(100.00m), 
+            "D"));
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230601"), 
+            new Money(150.00m), 
+            "D"));
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230610"), 
+            new Money(50.00m), 
+            "W"));
+
+
+        _accountRepoMock.Setup(r => r.GetByIdAsync("AC001"))
+                        .ReturnsAsync(account);
+
+        _interestCalculatorMock.Setup(c => c.CalculateTotalInterestAsync(account, It.IsAny<MonthlyPeriod>()))
+                               .ReturnsAsync(0.39m);
+
+        var result = await _service.PrintStatementAsync("AC001", 2023, 6);
+
+        Assert.True(result.IsSuccess);
+        var dto = result.Value;
+        Assert.Equal("AC001", dto.AccountId);
+        Assert.Equal(3, dto.Transactions.Count); 
+
+        Assert.Equal("D", dto.Transactions[0].Type);
+        Assert.Equal(150m, dto.Transactions[0].Amount);
+
+        Assert.Equal("W", dto.Transactions[1].Type);
+        Assert.Equal(50m, dto.Transactions[1].Amount);
+
+        Assert.Equal("I", dto.Transactions[2].Type);
+        Assert.Equal(0.39m, dto.Transactions[2].Amount);
+        Assert.Equal(string.Empty, dto.Transactions[2].TransactionId);
+        Assert.Equal(200.39m, dto.Transactions[2].Balance);
+    }      
+
+    [Fact]
+    public async Task PrintStatementAsync_ReturnCorrectResultWhenTransactionIncludeStartDateAndEndDate()
+    {
+        var account = new BankAccount("AC001");
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230501"), 
+            new Money(100.00m), 
+            "D"));
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230601"), 
+            new Money(150.00m), 
+            "D"));
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230610"), 
+            new Money(50.00m), 
+            "W"));
+
+        account.AddTransaction(_transactionFactory.CreateTransaction(
+            BusinessDate.From("20230630"), 
+            new Money(50.00m), 
+            "W"));
+
+        _accountRepoMock.Setup(r => r.GetByIdAsync("AC001"))
+                        .ReturnsAsync(account);
+
+        _interestCalculatorMock.Setup(c => c.CalculateTotalInterestAsync(account, It.IsAny<MonthlyPeriod>()))
+                               .ReturnsAsync(0.39m);
+
+        var result = await _service.PrintStatementAsync("AC001", 2023, 6);
+
+        Assert.True(result.IsSuccess);
+        var dto = result.Value;
+        Assert.Equal("AC001", dto.AccountId);
+        Assert.Equal(4, dto.Transactions.Count); 
+
+        Assert.Equal("D", dto.Transactions[0].Type);
+        Assert.Equal(150m, dto.Transactions[0].Amount);
+
+        Assert.Equal("W", dto.Transactions[1].Type);
+        Assert.Equal(50m, dto.Transactions[1].Amount);
+
+        Assert.Equal("I", dto.Transactions[3].Type);
+        Assert.Equal(0.39m, dto.Transactions[3].Amount);
+        Assert.Equal(string.Empty, dto.Transactions[3].TransactionId);
+        Assert.Equal(150.39m, dto.Transactions[3].Balance);
+    }          
 }

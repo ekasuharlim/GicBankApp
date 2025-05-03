@@ -68,7 +68,7 @@ public class InterestCalculatorService : IInterestCalculatorService {
         decimal latestRate = 
             latestRuleBeforeThisPeriod != null ? 
             latestRuleBeforeThisPeriod.RatePercentage: 
-            activeRules.First().RatePercentage;
+            0.0m;
 
         decimal latestEodBalance = previousPeriodBalance;
         DateTime currentStartDate = startDate;
@@ -89,7 +89,7 @@ public class InterestCalculatorService : IInterestCalculatorService {
                     latestEodBalance
                 ));
             }
-            
+
             currentStartDate = date;
 
             if (foundNewBalance) {
