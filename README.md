@@ -24,7 +24,7 @@ dotnet build
 dotnet test
 
 # Run the application
-dotnet run
+dotnet run --project ./GicBankApp/GicBankApp.csproj
 ```
 
 Assumptions:
