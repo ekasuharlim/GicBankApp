@@ -69,7 +69,7 @@ public class InterestCalculatorServiceTests
     public async Task CalculateTotalInterestAsync_ShouldHaveZeroInterestRateIfNoRateSpecifiedBeforeThePeriod()
     {
         var account = new BankAccount("AC002");
-        var period = MonthlyPeriod.Create(2024, 1).Value;
+        var period = MonthlyPeriod.Create(2024, 1).Value!;
 
         account.AddTransaction(_transactionFactory.CreateTransaction(
             BusinessDate.From("20231231"), new Money(1000m), "D"));

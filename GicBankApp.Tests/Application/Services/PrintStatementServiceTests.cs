@@ -31,7 +31,7 @@ public class PrintStatementServiceTests
     public async Task PrintStatementAsync_ReturnsFailure_WhenAccountNotFound()
     {
         _accountRepoMock.Setup(r => r.GetByIdAsync("AC001"))
-                        .ReturnsAsync((BankAccount)null);
+                        .ReturnsAsync(default(BankAccount));
 
         var result = await _service.PrintStatementAsync("AC001", 2023, 6);
 
