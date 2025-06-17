@@ -27,10 +27,6 @@ public class BankAccount : Entity, IAggregateRoot
         {
             return Result<Transaction>.Failure(Error.FirstTransactionCannotBeWithdrawal);
         }
-        if (_transactions.Count > 0 && transaction.Date.Value < _transactions.Last().Date.Value)
-        {
-            return Result<Transaction>.Failure(Error.TransactionDateMustBeAfterLastTransaction);
-        }
 
         if (transaction.Type == TransactionType.Withdrawal)
         {
